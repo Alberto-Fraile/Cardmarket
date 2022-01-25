@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-class ApiTokenVerify
+class AdminValidation
 {
     /**
      * Handle an incoming request.
@@ -17,17 +17,11 @@ class ApiTokenVerify
      */
     public function handle(Request $request, Closure $next)
     {
-        $apitoken = $request->api_token;
-
-        $user = User::where('api_token', $apitoken)->first();
-
-        if(!$user) {
-            $request['status'] = 0;
-            $request['msg'] = "Se ha producido un error: ";  
-
-        }else{
-            $request->user = $user;
+        if($request->user->puesto == 'administrador'){
             return $next($request);
+        }else {
+            $request['status'] = 0;
+            $request['msg'] = "No tienes permisos para realizar esta funcion "; 
         }
         return response()->json($request);
     }

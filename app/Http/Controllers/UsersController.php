@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\MessageBag;
 use App\Models\User;
 
 class UsersController extends Controller
@@ -19,7 +20,8 @@ class UsersController extends Controller
              'email' => 'required|email|unique:App\Models\User,email|max:30',
              'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
              'rol' => 'required|in:particular,profesional,administrador'
-            ]);
+            ]
+        );
 
         if ($validator->fails()){
             $respuesta['status'] = 0;
@@ -43,6 +45,78 @@ class UsersController extends Controller
                 $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
             }
         }
+        return response()->json($respuesta);
+    }
 
-    return response()->json($respuesta);
+    public function login(Request $req){
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $datos = $req->getContent();
+        $datos = json_decode($datos);
+        
+        $name = $datos->name;
+
+        //$user = User::where('name', '=', $name)->first();
+
+        if($user){
+            if (Hash::check($datos->password, $user->password)) {
+                do{
+                    $apitoken = Hash::make($user->id.now());
+
+                }while(User::where('api_token', $apitoken)->first());
+
+                $user->api_token = $apitoken;
+                $user->save();
+                $respuesta['msg'] = "Login correcto".$user->api_token;
+
+            }else {
+                $respuesta['status'] = 0;
+                $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();      
+            }
+        }else{
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();  
+        }
+        return response()->json($respuesta);
+    }
+
+    public function recoveredPassword(Request $req){ 
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $datos = $req->getContent();
+        $datos = json_decode($datos);
+
+        $email = $datos->email;
+
+        //$user = User::where('name', '=', $name)->first();
+        
+        if($user = User::where('email', '=', $datos->email)->first()){
+
+            $user->api_token = null;
+
+                $password = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNñÑoOpPqQrRsStTuUvVwWxXyYzZ0123456789";
+                $passwordCharCount = strlen($password);
+                $passwordLength = 8;
+                $newPassword = "";
+                for($i=0;$i<$passwordLength;$i++) {
+                $newPassword .= $password[rand(0,$passwordCharCount-1)];
+                }
+            
+            $user->password = Hash::make($newPassword);
+            $user->save();
+            
+            $respuesta['msg'] = "Aquí tiene la contraseña nueva generada ".$user->newPassword;
+
+        }else{
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Se ha producido un error: ";
+        } 
+        return response()->json($respuesta);
+    }
+
+
+
+
 }
+
+
