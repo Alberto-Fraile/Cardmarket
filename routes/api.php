@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/login',[UsersController::class,'login']);
-Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword'])
+Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword']);
 
 Route::middleware('api_token', 'validation', 'validation_admin')->prefix('user')->group(function(){
 	Route::put('/register',[UsersController::class,'register']);
