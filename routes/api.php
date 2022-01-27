@@ -25,3 +25,7 @@ Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword']);
 Route::middleware('api_token', 'validation', 'validation_admin')->prefix('user')->group(function(){
 	Route::put('/register',[UsersController::class,'register']);
 });
+
+Route::middleware('validation_admin')->prefix('user')->group(function(){
+	Route::put('/createCard',[CardsController::class,'createCard']);
+});

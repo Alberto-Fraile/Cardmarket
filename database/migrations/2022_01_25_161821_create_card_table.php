@@ -15,6 +15,11 @@ class CreateCardTable extends Migration
     {
         Schema::create('card', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description');
+            $table->string('collection');
+            $table->unsignedBigInteger('collection_id');
+            $table->foreign('collection_id')->references('id')->on('collection');
             $table->timestamps();
         });
     }
