@@ -28,4 +28,5 @@ Route::middleware('api_token', 'validation', 'validation_admin')->prefix('user')
 
 Route::middleware('validation_admin')->prefix('user')->group(function(){
 	Route::put('/createCard',[CardsController::class,'createCard']);
+	Route::put('/createCollection',[CollectionController::class,'createCollection']);
 });

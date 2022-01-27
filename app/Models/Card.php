@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     use HasFactory;
+
+    public function collection(){
+        return $this->belongsTo(Collection::class);
+    }
 }
