@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\CardsController;
+use App\Http\Controllers\CollectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,12 @@ Route::middleware('api_token', 'validation', 'validation_admin')->prefix('user')
 	Route::put('/register',[UsersController::class,'register']);
 });
 
-Route::middleware('validation_admin')->prefix('user')->group(function(){
+Route::middleware('api_token','validation_admin')->prefix('user')->group(function(){
 	Route::put('/createCard',[CardsController::class,'createCard']);
 	Route::put('/createCollection',[CollectionController::class,'createCollection']);
+    Route::put('/asociate_cards/{cards_id}/{collection_id}',[UsersController::class,'asociate_cards']);
+});
+
+Route::middleware('api_token', 'validation')->prefix('user')->group(function(){
+	Route::get('/searchCard',[CardsController::class,'searchCard']);
 });

@@ -39,7 +39,7 @@ class UsersController extends Controller
 
             try{
                 $user->save();
-                $respuesta['msg'] = "Usuario guardado con id ".$user->id;
+                $respuesta['msg'] = "User register with id ".$user->id;
             }catch(\Exception $e){
                 $respuesta['status'] = 0;
                 $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();

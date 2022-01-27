@@ -12,4 +12,9 @@ class Card extends Model
     public function collection(){
         return $this->belongsTo(Collection::class);
     }
+
+    public function collections()
+    {
+        return $this->belongsToMany(Collection::class, 'card_collection', 'collection_id', 'card_id');
+    }
 }
