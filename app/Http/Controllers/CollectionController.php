@@ -12,9 +12,7 @@ class CollectionController extends Controller
     public function createCollection(Request $req){
 
         $respuesta = ["status" => 1, "msg" => ""];
-
         $datos = $req->getContent();
-
         $datos = json_decode($datos);
 
         $collection = new Collection();

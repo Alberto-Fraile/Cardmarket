@@ -21,21 +21,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('card')->group(function(){
-	Route::put('/createCard',[CardsController::class,'createCard']);
-	});
-
-
-Route::prefix('collection')->group(function(){
-	Route::put('/createCollection',[CollectionController::class,'createCollection']);
-	});
-
 
 Route::prefix('user')->group(function(){
 	Route::post('/login',[UsersController::class,'login']);
 	Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword']);
 	Route::put('/register',[UsersController::class,'register']);
 	
+	Route::middleware('api_token','validation_admin')->group(function(){
+		Route::put('/createCard',[CardsController::class,'createCard']);
+		Route::put('/createCollection',[CollectionController::class,'createCollection']);
+		Route::put('/asociate_cards/{cards_id}/{collections_id}',[UsersController::class,'asociate_cards']);
+	});
 
 	Route::middleware('api_token', 'validation', 'validation_admin')->group(function(){
 
@@ -45,8 +41,4 @@ Route::prefix('user')->group(function(){
 		Route::get('/searchCard',[CardsController::class,'searchCard']);
 	});
 });
-	//Route::middleware('api_token','validation_admin')->group(function(){
-		//Route::put('/createCard',[CardsController::class,'createCard']);
-		//Route::put('/createCollection',[CollectionController::class,'createCollection']);
-    	//Route::put('/asociate_cards/{cards_id}/{collection_id}',[UsersController::class,'asociate_cards']);
-	//});
+	

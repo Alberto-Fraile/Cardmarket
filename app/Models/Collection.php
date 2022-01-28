@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
+   use HasFactory;
 
+   public function card()
+   {
+      return $this->hasMany(Card::class, 'collections_id');
+
+      return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');  
+   }
 }

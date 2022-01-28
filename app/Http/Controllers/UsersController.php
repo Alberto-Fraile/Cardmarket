@@ -114,16 +114,16 @@ class UsersController extends Controller
         return response()->json($respuesta);
     }
 
-    public function asociate_cards($card_id, $collection_id){
+    public function asociate_cards($cards_id, $collections_id){
         $respuesta = ["status" => 1, "msg" => ""];
 
-        $card = Card::find($card_id);
-        $collection = Collection::find($collection_id);
+        $card = Card::find($cards_id);
+        $collection = Collection::find($collections_id);
 
         try{
             if ($card && $collection){
                 $card->collection()->attach($collection);
-                $respuesta['msg'] = "Card asociate with collection id ".$collection->id;
+                $respuesta['msg'] = "Card asociate with collection id ".$collections->id;
             }else {
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;
@@ -136,7 +136,6 @@ class UsersController extends Controller
 
         return response()->json($respuesta);
     }
-
 
 }
 
