@@ -73,11 +73,11 @@ class UsersController extends Controller
 
             }else {
                 $respuesta['status'] = 0;
-                $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();      
+                $respuesta['msg'] = "Se ha producido un error: ";      
             }
         }else{
             $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();  
+            $respuesta['msg'] = "Se ha producido un error: ";  
         }
         return response()->json($respuesta);
     }
@@ -102,10 +102,10 @@ class UsersController extends Controller
                 $newPassword .= $password[rand(0,$passwordCharCount-1)];
                 }
             
+            $user->password = $newPassword;
+            $respuesta['msg'] = "Aquí tiene la contraseña nueva generada: ".$user->password;
             $user->password = Hash::make($newPassword);
-            $user->save();
-            
-            $respuesta['msg'] = "Aquí tiene la contraseña nueva generada ".$user->newPassword;
+            $user->save();  
 
         }else{
             $respuesta['status'] = 0;
@@ -122,8 +122,8 @@ class UsersController extends Controller
 
         try{
             if ($card && $collection){
-                $card->collection()->attach($collection);
-                $respuesta['msg'] = "Card asociate with collection id ".$collections->id;
+                $card->collections()->attach($collection);
+                $respuesta['msg'] = "Card asociate with collection id ".$collection->id;
             }else {
                 $respuesta["msg"] = "Usuario no encontrado";
                 $respuesta["status"] = 0;

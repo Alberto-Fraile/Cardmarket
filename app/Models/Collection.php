@@ -12,7 +12,10 @@ class Collection extends Model
    public function card()
    {
       return $this->hasMany(Card::class, 'collections_id');
-
-      return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');  
    }
+
+   public function cards()
+   {
+      return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');
+   } 
 }
