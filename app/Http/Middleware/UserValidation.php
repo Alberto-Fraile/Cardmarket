@@ -17,7 +17,7 @@ class UserValidation
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->user->puesto == 'particular' || $request->user->puesto == 'profesional'){
+        if($request->user->rol == 'particular' || $request->user->rol == 'profesional'){
             return $next($request);
         }else {
             $request['status'] = 0;

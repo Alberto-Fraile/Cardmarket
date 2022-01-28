@@ -17,7 +17,7 @@ class AdminValidation
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->user->puesto == 'administrador'){
+        if($request->user->rol == 'administrador'){
             return $next($request);
         }else {
             $request['status'] = 0;

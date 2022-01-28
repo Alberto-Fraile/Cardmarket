@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\MessageBag;
 use App\Models\User;
+use App\Models\Card;
+use App\Models\Collection;
 
 class UsersController extends Controller
 {
@@ -16,7 +18,7 @@ class UsersController extends Controller
 
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
-            ['name' => 'required|name|unique:App\Models\User,name|max:30',
+            ['name' => 'required|max:30',
              'email' => 'required|email|unique:App\Models\User,email|max:30',
              'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
              'rol' => 'required|in:particular,profesional,administrador'
@@ -56,7 +58,7 @@ class UsersController extends Controller
         
         $name = $datos->name;
 
-        //$user = User::where('name', '=', $name)->first();
+        $user = User::where('name', '=', $name)->first();
 
         if($user){
             if (Hash::check($datos->password, $user->password)) {
@@ -67,7 +69,7 @@ class UsersController extends Controller
 
                 $user->api_token = $apitoken;
                 $user->save();
-                $respuesta['msg'] = "Login correcto".$user->api_token;
+                $respuesta['msg'] = "Login correcto ".$user->api_token;
 
             }else {
                 $respuesta['status'] = 0;
@@ -87,8 +89,6 @@ class UsersController extends Controller
         $datos = json_decode($datos);
 
         $email = $datos->email;
-
-        //$user = User::where('name', '=', $name)->first();
         
         if($user = User::where('email', '=', $datos->email)->first()){
 
