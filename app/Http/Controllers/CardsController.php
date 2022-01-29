@@ -11,7 +11,7 @@ class CardsController extends Controller
 {
     public function createCard(Request $req){
 
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
 
         $datos = $req->getContent();
         $datos = json_decode($datos);
@@ -24,17 +24,17 @@ class CardsController extends Controller
 
         try{
             $card->save();
-            $respuesta['msg'] = "Card save with id ".$card->id;
+            $response['msg'] = "Card save with id ".$card->id;
         }catch(\Exception $e){
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+            $response['status'] = 0;
+            $response['msg'] = "An error has occurred: ".$e->getMessage();
         }
 
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 
     public function searchCard(Request $req){
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
         $datos = $req->getContent();
         
         $datos = json_decode($datos);
@@ -46,15 +46,15 @@ class CardsController extends Controller
                 $card = Card::withCount('collections as Cantidad')
                 ->where('name', 'like', '%' .$req->input('name'). '%')
                 ->get();
-                $respuesta['datos'] = $card;
+                $response['datos'] = $card;
             }else{
                 $card = Card::withCount('collections as Cantidad')->get(); 
-                $respuesta['datos'] = $card;
+                $response['datos'] = $card;
             }        
         }catch(\Exception $e){
-           $respuesta['status'] = 0;
-           $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();           
+           $response['status'] = 0;
+           $response['msg'] = "An error has occurred: ".$e->getMessage();           
         }
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 }

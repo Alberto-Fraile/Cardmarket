@@ -14,20 +14,20 @@ class UsersController extends Controller
 {
     public function register(Request $req){
 
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
 
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
             ['name' => 'required|max:30',
              'email' => 'required|email|unique:App\Models\User,email|max:30',
              'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
-             'rol' => 'required|in:particular,profesional,administrador'
+             'rol' => 'required|in:particular,professional,admin'
             ]
         );
 
         if ($validator->fails()){
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = $validator->errors();
+            $response['status'] = 0;
+            $response['msg'] = $validator->errors();
 
         }else {
             $datos = $req->getContent();
@@ -41,17 +41,17 @@ class UsersController extends Controller
 
             try{
                 $user->save();
-                $respuesta['msg'] = "User register with id ".$user->id;
+                $response['msg'] = "User register with id ".$user->id;
             }catch(\Exception $e){
-                $respuesta['status'] = 0;
-                $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+                $response['status'] = 0;
+                $response['msg'] = "An error has occurred: ".$e->getMessage();
             }
         }
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 
     public function login(Request $req){
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
 
         $datos = $req->getContent();
         $datos = json_decode($datos);
@@ -69,21 +69,21 @@ class UsersController extends Controller
 
                 $user->api_token = $apitoken;
                 $user->save();
-                $respuesta['msg'] = "Login correcto ".$user->api_token;
+                $response['msg'] = "Correct login ".$user->api_token;
 
             }else {
-                $respuesta['status'] = 0;
-                $respuesta['msg'] = "Se ha producido un error: ";      
+                $response['status'] = 0;
+                $response['msg'] = "An error has occurred: ";      
             }
         }else{
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ";  
+            $response['status'] = 0;
+            $response['msg'] = "An error has occurred: ";  
         }
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 
     public function recoveredPassword(Request $req){ 
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
 
         $datos = $req->getContent();
         $datos = json_decode($datos);
@@ -103,19 +103,19 @@ class UsersController extends Controller
                 }
             
             $user->password = $newPassword;
-            $respuesta['msg'] = "Aquí tiene la contraseña nueva generada: ".$user->password;
+            $response['msg'] = "Here is the new generated password: ".$user->password;
             $user->password = Hash::make($newPassword);
             $user->save();  
 
         }else{
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ";
+            $response['status'] = 0;
+            $response['msg'] = "An error has occurred: ";
         } 
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 
     public function asociate_cards($cards_id, $collections_id){
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
 
         $card = Card::find($cards_id);
         $collection = Collection::find($collections_id);
@@ -123,18 +123,18 @@ class UsersController extends Controller
         try{
             if ($card && $collection){
                 $card->collections()->attach($collection);
-                $respuesta['msg'] = "Card asociate with collection id ".$collection->id;
+                $response['msg'] = "Card asociate with collection id ".$collection->id;
             }else {
-                $respuesta["msg"] = "Usuario no encontrado";
-                $respuesta["status"] = 0;
+                $response["msg"] = "User not found";
+                $response["status"] = 0;
             }
 
         }catch(\Exception $e){
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+            $response['status'] = 0;
+            $response['msg'] = "An error has occurred: ".$e->getMessage();
         }
 
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 
 }

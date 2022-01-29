@@ -23,7 +23,7 @@ class ApiTokenVerify
 
         if(!$user) {
             $request['status'] = 0;
-            $request['msg'] = "Se ha producido un error: ";  
+            $request['msg'] = "An error has occurred: ";  
 
         }else{
             $request->user = $user;

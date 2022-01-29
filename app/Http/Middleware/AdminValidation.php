@@ -21,7 +21,7 @@ class AdminValidation
             return $next($request);
         }else {
             $request['status'] = 0;
-            $request['msg'] = "No tienes permisos para realizar esta funcion "; 
+            $request['msg'] = "You don't have permissions for doing this "; 
         }
         return response()->json($request);
     }

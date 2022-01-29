@@ -11,23 +11,23 @@ class CollectionController extends Controller
 {
     public function createCollection(Request $req){
 
-        $respuesta = ["status" => 1, "msg" => ""];
+        $response = ["status" => 1, "msg" => ""];
         $datos = $req->getContent();
         $datos = json_decode($datos);
 
         $collection = new Collection();
 
         $collection->name = $datos->name;
-        $collection->simbolo = $datos->simbolo;
+        $collection->symbol = $datos->symbol;
 
         try{
             $collection->save();
-            $respuesta['msg'] = "Collection save with id ".$collection->id;
+            $response['msg'] = "Collection save with id ".$collection->id;
         }catch(\Exception $e){
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+            $response['status'] = 0;
+            $response['msg'] = "An error has occurred: ".$e->getMessage();
         }
 
-        return response()->json($respuesta);
+        return response()->json($response);
     }
 }
