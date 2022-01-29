@@ -20,6 +20,7 @@ class CardsController extends Controller
 
         $card->name = $datos->name;
         $card->description = $datos->description;
+        $card->collection = $datos->collection;
         $card->collections_id = $datos->collections_id;
 
         try{
