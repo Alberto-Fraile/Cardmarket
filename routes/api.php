@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/searchBuyCard',[CardsController::class,'searchBuyCard']);
+Route::get('/searchBuyCard',[CardsSoldsController::class,'searchBuyCard']);
 
 Route::prefix('user')->group(function(){
 	Route::post('/login',[UsersController::class,'login']);

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     use HasFactory;
-    protected $hidden = ['collections_id','description','created_at','updated_at'];
+    protected $hidden = ['created_at','updated_at'];
 
     public function collection()
     {
