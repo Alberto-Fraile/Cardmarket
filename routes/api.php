@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\CardsController;
-use App\Http\Controllers\CardsSoldController;
+use App\Http\Controllers\CardsSoldsController;
 use App\Http\Controllers\CollectionController;
 
 /*
@@ -38,7 +38,7 @@ Route::prefix('user')->group(function(){
 
 	Route::middleware('api_token', 'validation')->group(function(){
 		Route::get('/searchCard',[CardsController::class,'searchCard']);
-		Route::put('/createCardSold',[CardsSoldController::class,'createCardSold']);
+		Route::put('/createCardsSolds',[CardsSoldsController::class,'createCardsSolds']);
 	});
 });
 	

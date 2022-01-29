@@ -7,9 +7,9 @@ use App\Models\CardSold;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
-class CardsSoldController extends Controller
+class CardsSoldsController extends Controller
 {
-    public function createCardSold(Request $req){
+    public function createCardsSolds(Request $req){
 
         $response = ["status" => 1, "msg" => ""];
         $datos = $req->getContent();
