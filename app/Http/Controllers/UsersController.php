@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\MessageBag;
 use App\Models\User;
 use App\Models\Card;
+use App\Models\CardSold;
 use App\Models\Collection;
 
 class UsersController extends Controller

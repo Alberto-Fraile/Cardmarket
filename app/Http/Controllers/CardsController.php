@@ -21,8 +21,6 @@ class CardsController extends Controller
         $card->name = $datos->name;
         $card->description = $datos->description;
         $card->collections_id = $datos->collections_id;
-        $card->amount = $datos->amount;
-        $card->price = $datos->price;
 
         try{
             $card->save();
@@ -57,32 +55,6 @@ class CardsController extends Controller
            $response['status'] = 0;
            $response['msg'] = "An error has occurred: ".$e->getMessage();           
         }
-        return response()->json($response);
-    }
-
-    public function createCardSold(Request $req){
-
-        $response = ["status" => 1, "msg" => ""];
-
-        $datos = $req->getContent();
-        $datos = json_decode($datos);
-
-        $card = new Card();
-
-        $card->name = $datos->name;
-        $card->description = $datos->description;
-        $card->collections_id = $datos->collections_id;
-        $card->amount = $datos->amount;
-        $card->price = $datos->price;
-
-        try{
-            $card->save();
-            $response['msg'] = "Card save with id ".$card->id;
-        }catch(\Exception $e){
-            $response['status'] = 0;
-            $response['msg'] = "An error has occurred: ".$e->getMessage();
-        }
-
         return response()->json($response);
     }
 
