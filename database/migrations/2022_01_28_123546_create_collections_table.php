@@ -19,7 +19,7 @@ class CreateCollectionsTable extends Migration
             $table->id('id');
             $table->string('name');
             $table->string('symbol');
-            $table->timestamps();
+            $table->timestamps('date', $precision = 0);
         });
     }
 
