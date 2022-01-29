@@ -43,12 +43,12 @@ class CardsController extends Controller
             $card = DB::Table('card');
 
             if ($req ->has('name')) {
-               $card = Card::withCount('card as Cantidad')
-              ->where('name', 'like', '%' .$req->input('name'). '%')
+                $card = Card::withCount('collections as Cantidad')
+                ->where('name', 'like', '%' .$req->input('name'). '%')
                 ->get();
                 $respuesta['datos'] = $card;
             }else{
-                $card = Card::withCount('card as Cantidad')->get(); 
+                $card = Card::withCount('collections as Cantidad')->get(); 
                 $respuesta['datos'] = $card;
             }        
         }catch(\Exception $e){

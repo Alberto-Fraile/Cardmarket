@@ -13,11 +13,12 @@ class CreateCollectionsTable extends Migration
      */
     public function up()
     {
+        //protected $table = 'created_at'
+
         Schema::create('collections', function (Blueprint $table) {
             $table->id('id');
             $table->string('name');
             $table->string('simbolo');
-            $table->string('date');
             $table->timestamps();
         });
     }

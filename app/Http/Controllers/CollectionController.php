@@ -19,7 +19,6 @@ class CollectionController extends Controller
 
         $collection->name = $datos->name;
         $collection->simbolo = $datos->simbolo;
-        $collection->date = $datos->date;
 
         try{
             $collection->save();
