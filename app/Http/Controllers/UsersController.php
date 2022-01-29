@@ -137,31 +137,6 @@ class UsersController extends Controller
         return response()->json($response);
     }
 
-    public function searchBuyCard(Request $req){
-        $response = ["status" => 1, "msg" => ""];
-        $datos = $req->getContent();
-        
-        $datos = json_decode($datos);
-        
-        try{
-            $card = DB::Table('card');
-
-            if ($req ->has('name')) {
-                $card = Card::withCount('collections as Amount')
-                ->where('name', 'like', '%' .$req->input('name'). '%')
-                ->get();
-                $response['datos'] = $card;
-            }else{
-                $card = Card::withCount('collections as Amount')->get(); 
-                $response['datos'] = $card;
-            }        
-        }catch(\Exception $e){
-           $response['status'] = 0;
-           $response['msg'] = "An error has occurred: ".$e->getMessage();           
-        }
-        return response()->json($response);
-    }
-
 }
 
 

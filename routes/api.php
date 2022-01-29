@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::get('/searchBuyCard',[CardsController::class,'searchBuyCard']);
 
 Route::prefix('user')->group(function(){
