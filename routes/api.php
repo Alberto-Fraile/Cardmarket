@@ -22,13 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('/searchBuyCard',[CardsSoldsController::class,'searchBuyCard']);
-
 Route::prefix('user')->group(function(){
 	Route::post('/login',[UsersController::class,'login']);
 	Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword']);
 	Route::put('/register',[UsersController::class,'register']);
+	Route::get('/searchBuyCard',[CardsSoldsController::class,'searchBuyCard']);
 	
 	Route::middleware('api_token','validation_admin')->group(function(){
 		Route::put('/createCard',[CardsController::class,'createCard']);
