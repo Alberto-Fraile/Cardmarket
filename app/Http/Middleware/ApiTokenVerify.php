@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class ApiTokenVerify
 {
@@ -18,12 +19,13 @@ class ApiTokenVerify
     public function handle(Request $request, Closure $next)
     {
         $apitoken = $request->api_token;
-
+        Log::info('Search ApiToken'); 
         $user = User::where('api_token', $apitoken)->first();
 
         if(!$user) {
             $request['status'] = 0;
             $request['msg'] = "An error has occurred: ";  
+            Log::error('An error has occurred: '); 
 
         }else{
             $request->user = $user;

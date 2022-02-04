@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Card;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Log;
 
 class CardsController extends Controller
 {
@@ -42,19 +43,24 @@ class CardsController extends Controller
         
         try{
             $card = DB::Table('card');
+            Log::info('Show table card ');
 
-            if ($req ->has('name')) {
+            if ($req->has('name')) {
                 $card = Card::withCount('collections as Amount')
                 ->where('name', 'like', '%' .$req->input('name'). '%')
-                ->get();
+                ->get();  
                 $response['datos'] = $card;
+                Log::debug($response);
+
             }else{
                 $card = Card::withCount('collections as Amount')->get(); 
                 $response['datos'] = $card;
             }        
         }catch(\Exception $e){
            $response['status'] = 0;
-           $response['msg'] = "An error has occurred: ".$e->getMessage();           
+           $response['msg'] = "An error has occurred: ".$e->getMessage(); 
+
+           Log::error('An error has occurred: ');          
         }
         return response()->json($response);
     }
