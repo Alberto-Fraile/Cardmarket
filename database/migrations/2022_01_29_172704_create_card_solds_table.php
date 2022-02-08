@@ -14,10 +14,14 @@ class CreateCardSoldsTable extends Migration
     public function up()
     {
         Schema::create('card_solds', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('name');
             $table->integer('amount');
             $table->float('price');
+            $table->unsignedBigInteger('card_asociate');
+            $table->unsignedBigInteger('user_asociate');
+            $table->foreign('user_asociate')->references('id')->on('users');
+            $table->foreign('card_asociate')->references('id')->on('cards');
             $table->timestamps();
         });
     }

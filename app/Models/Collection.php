@@ -9,13 +9,18 @@ class Collection extends Model
 {
    use HasFactory;
 
-   public function card()
-   {
-      return $this->hasMany(Card::class, 'collections_id');
+   protected $table = 'collections';
+   public function cards(){
+        return $this->belongsToMany(Card::class,'card_colection');
    }
-
-   public function cards()
-   {
-      return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');
-   } 
 }
+
+   // public function card()
+   // {
+   //    return $this->hasMany(Card::class, 'collections_id');
+   // }
+
+   // public function cards()
+   // {
+   //    return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');
+   // } 
