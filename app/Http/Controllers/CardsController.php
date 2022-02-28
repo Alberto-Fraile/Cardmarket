@@ -126,29 +126,6 @@ class CardsController extends Controller
         return response()->json($response);
     }
 
-    // if(isset($datos->user_asociate) && !empty($datos->user_asociate) && isset($datos->card_asociate) && !empty($datos->card_asociate) ){
-    //     $user = User::find($datos->user_asociate);
-    //     $card = Carta::find($datos->card_asociate);
-    //     if($user && $card){
-    //         $card -> user_asociate = $datos->user_asociate;
-    //         $card -> card_asociate = $datos->card_asociate;
-    //         try {
-    //             $card->save();
-    //             $respuesta["msg"] = "Venta subida correctamente";
-    //         }catch (\Exception $e) {
-    //             $respuesta["status"] = 0;
-    //             $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
-    //         }  
-    //     } else {
-    //         $respuesta["status"] = 0;
-    //         $respuesta["msg"] = "Usuario o carta no encontrada";
-    //     }
-    // }
-    // else {
-    //     $respuesta["status"] = 0;
-    //     $respuesta["msg"] = "No se ha asociado ningun usuario o carta, vuelve a intentarlo";
-    // }
-
     public function searchCard(Request $req){
         $response = ["status" => 1, "msg" => ""];
         $datos = $req->getContent();
