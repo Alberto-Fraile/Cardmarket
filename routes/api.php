@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Route::put('/createCard',[CardsController::class,'createCard']);
+
 Route::prefix('user')->group(function(){
 	Route::post('/login',[UsersController::class,'login']);
 	Route::post('/recoveredPassword',[UsersController::class,'recoveredPassword']);

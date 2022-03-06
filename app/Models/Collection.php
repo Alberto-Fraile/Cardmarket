@@ -11,16 +11,6 @@ class Collection extends Model
 
    protected $table = 'collections';
    public function cards(){
-        return $this->belongsToMany(Card::class,'card_colection');
+        return $this->belongsToMany(Card::class);
    }
 }
-
-   // public function card()
-   // {
-   //    return $this->hasMany(Card::class, 'collections_id');
-   // }
-
-   // public function cards()
-   // {
-   //    return $this->belongsToMany(Card::class, 'card_collection', 'collections_id', 'cards_id');
-   // } 

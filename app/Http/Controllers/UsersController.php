@@ -14,7 +14,7 @@ class UsersController extends Controller
 {
     public function register(Request $req){
 
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
 
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
@@ -26,7 +26,7 @@ class UsersController extends Controller
         );
 
         if ($validator->fails()){
-            $response['status'] = 0;
+            $response['status'] = 400;
             $response['msg'] = $validator->errors();
 
         }else {
@@ -43,7 +43,7 @@ class UsersController extends Controller
                 $user->save();
                 $response['msg'] = "User register with id ".$user->id;
             }catch(\Exception $e){
-                $response['status'] = 0;
+                $response['status'] = 400;
                 $response['msg'] = "An error has occurred: ".$e->getMessage();
             }
         }
@@ -51,7 +51,7 @@ class UsersController extends Controller
     }
 
     public function login(Request $req){
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => "ganancia"];
 
         $datos = $req->getContent();
         $datos = json_decode($datos);
@@ -72,18 +72,18 @@ class UsersController extends Controller
                 $response['msg'] = "Correct login ".$user->api_token;
 
             }else {
-                $response['status'] = 0;
-                $response['msg'] = "An error has occurred: ";      
+                $response['status'] = 401;
+                $response['msg'] = "Your password is incorrect";      
             }
         }else{
-            $response['status'] = 0;
-            $response['msg'] = "An error has occurred: ";  
+            $response['status'] = 402;
+            $response['msg'] = "Incorrect data";  
         }
         return response()->json($response);
     }
 
     public function recoveredPassword(Request $req){ 
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
 
         $datos = $req->getContent();
         $datos = json_decode($datos);
@@ -108,14 +108,14 @@ class UsersController extends Controller
             $user->save();  
 
         }else{
-            $response['status'] = 0;
+            $response['status'] = 400;
             $response['msg'] = "An error has occurred: ";
         } 
         return response()->json($response);
     }
 
     public function asociate_cards($cards_id, $collections_id){
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
 
         $card = Card::find($cards_id);
         $collection = Collection::find($collections_id);
@@ -126,11 +126,11 @@ class UsersController extends Controller
                 $response['msg'] = "Card asociate with collection id ".$collection->id;
             }else {
                 $response["msg"] = "User not found";
-                $response["status"] = 0;
+                $response["status"] = 400;
             }
 
         }catch(\Exception $e){
-            $response['status'] = 0;
+            $response['status'] = 400;
             $response['msg'] = "An error has occurred: ".$e->getMessage();
         }
 

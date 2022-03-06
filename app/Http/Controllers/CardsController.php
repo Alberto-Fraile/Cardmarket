@@ -6,47 +6,57 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Card;
-use App\Models\Collection;
-use App\Models\CardSold;
-use App\Models\User;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Log;
+use App\Models\Card;
+use App\Models\Collection;
+use App\Models\CardCollection;
+use App\Models\CardSold;
+use App\Models\User;
 
 class CardsController extends Controller
 {
     public function createCard(Request $req){
 
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
         
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
-            ['name' => 'required|max:30',
-             'description' => 'required|',
-             'collection' => 'required|max:30'
+            [
+              'name' => 'required|max:30',
+              'description' => 'required|max:30'
             ]
         );
 
         if ($validator->fails()){
-            $response['status'] = 0;
+            $response['status'] = 402;
             $response['msg'] = $validator->errors();
 
         }else {
             $datos = $req->getContent();
             $datos = json_decode($datos);
 
-            $card = new Card();
+            $collection = Collection::where('name', '=',$datos->collection)->first();
+            if ($collection) {
+                $card = new Card();
+                //$newCollection = new Collection();
+                $card->name = $datos->name;
+                $card->description = $datos->description;
 
-            $card->name = $datos->name;
-            $card->description = $datos->description;
-            $card->collection = $datos->collection;
-
-            try{
-                $card->save();
-                $response['msg'] = "Card save with id ".$card->id;
-            }catch(\Exception $e){
-                $response['status'] = 0;
-                $response['msg'] = "An error has occurred: ".$e->getMessage();
+                try {
+                    $card->save();
+                    $cardCollection = new CardCollection();
+                    $cardCollection->cards_id = $card->id;
+                    $cardCollection->collections_id = $collection->id;
+                    $cardCollection->save();
+                    $response['msg'] = 'Carta guardada y asociada con la colección';
+                } catch (\Exception $e) {
+                    $response['status'] = 400;
+                    $response['msg'] = 'Se ha producido un error: '.$e->getMessage();
+                }
+            } else {
+                $response['status'] = 401;
+                $response['msg'] = 'La coleccion ingresada no existe';
             }
         }
         return response()->json($response);
@@ -54,18 +64,19 @@ class CardsController extends Controller
 
     public function createCollection(Request $req){
 
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
 
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
             ['name' => 'required|max:30',
              'symbol' => 'required|max:30',
-             'date' => 'required|max:30'
+             'date' => 'required|max:30',
+             //'cards' => 'required'
             ]
         );
 
         if ($validator->fails()){
-            $response['status'] = 0;
+            $response['status'] = 400;
             $response['msg'] = $validator->errors();
 
         }else {
@@ -82,7 +93,7 @@ class CardsController extends Controller
                 $collection->save();
                 $response['msg'] = "Collection save with id ".$collection->id;
             }catch(\Exception $e){
-                $response['status'] = 0;
+                $response['status'] = 400;
                 $response['msg'] = "An error has occurred: ".$e->getMessage();
             }
         }
@@ -91,43 +102,53 @@ class CardsController extends Controller
 
     public function createCardsSolds(Request $req){
 
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
 
         $validator = validator::make(json_decode($req->getContent(),true
         ), 
-            ['name' => 'required|max:30',
+            [
+            //'name' => 'required|max:30',
              'amount' => 'required|max:30',
              'price' => 'required|max:30'
             ]
         );
 
         if ($validator->fails()){
-            $response['status'] = 0;
+            $response['status'] = 400;
             $response['msg'] = $validator->errors();
 
         }else {
             $datos = $req->getContent();
             $datos = json_decode($datos);
 
-            $card = new CardSold();
+            $card = Card::where('name', '=',$datos->card)->first();
+            if ($card) {
+                $cardSold = new CardSold();
+                //$card->name = $datos->name;
+                $cardSold->amount = $datos->amount;
+                $cardSold->price = $datos->price;
 
-            $card->name = $datos->name;
-            $card->amount = $datos->amount;
-            $card->price = $datos->price;
-
-            try{
-                $card->save();
-                $response['msg'] = "Card save with id ".$card->id;
-            }catch(\Exception $e){
-                $response['status'] = 0;
-                $response['msg'] = "An error has occurred: ".$e->getMessage();
+                try {
+                    $cardSold->save();
+                    $cardSold = new CardSold();
+                    $cardSold->card_asociate = $card->id;
+                    $cardSold->user_asociate = $user->id;
+                    $cardSold->save();
+                    $response['msg'] = 'Carta guardada y asociada con el usuario';
+                } catch (\Exception $e) {
+                    $response['status'] = 400;
+                    $response['msg'] = 'Se ha producido un error: '.$e->getMessage();
+                }
+            } else {
+                $response['status'] = 400;
+                $response['msg'] = 'La carta ingresada no existe';
             }
         }
         return response()->json($response);
     }
 
     public function searchCard(Request $req){
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
         $datos = $req->getContent();
         
         $datos = json_decode($datos);
@@ -144,12 +165,12 @@ class CardsController extends Controller
                 $response['datos'] = $card;
                 Log::debug($response);
             }else{
-               $response['status'] = 0;
+               $response['status'] = 400;
                $response['msg'] = "An error has occurred: "; 
                Log::error('An error has occurred: ');
             }        
         }catch(\Exception $e){
-           $response['status'] = 0;
+           $response['status'] = 400;
            $response['msg'] = "An error has occurred: ".$e->getMessage(); 
            Log::error('An error has occurred: ');          
         }
@@ -157,7 +178,7 @@ class CardsController extends Controller
     }    
 
     public function searchBuyCard(Request $req){
-        $response = ["status" => 1, "msg" => ""];
+        $response = ["status" => 200, "msg" => ""];
         $datos = $req->getContent();
         
         $datos = json_decode($datos);
@@ -172,7 +193,7 @@ class CardsController extends Controller
             $response['datos'] = $card; 
 
         }catch(\Exception $e){
-           $response['status'] = 0;
+           $response['status'] = 400;
            $response['msg'] = "An error has occurred: ".$e->getMessage();           
         }
         return response()->json($response);

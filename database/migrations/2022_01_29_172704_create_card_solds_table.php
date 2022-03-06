@@ -15,7 +15,7 @@ class CreateCardSoldsTable extends Migration
     {
         Schema::create('card_solds', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name');
+            //$table->string('name');
             $table->integer('amount');
             $table->float('price');
             $table->unsignedBigInteger('card_asociate');
