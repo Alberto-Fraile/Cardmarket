@@ -39,7 +39,6 @@ class CardsController extends Controller
             $collection = Collection::where('name', '=',$datos->collection)->first();
             if ($collection) {
                 $card = new Card();
-                //$newCollection = new Collection();
                 $card->name = $datos->name;
                 $card->description = $datos->description;
 
