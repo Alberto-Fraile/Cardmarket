@@ -19,9 +19,9 @@ class CreateCardSoldsTable extends Migration
             $table->integer('amount');
             $table->float('price');
             $table->unsignedBigInteger('card_asociate');
+            $table->foreign('card_asociate')->references('id')->on('card_colllection');
             $table->unsignedBigInteger('user_asociate');
             $table->foreign('user_asociate')->references('id')->on('users');
-            $table->foreign('card_asociate')->references('id')->on('cards');
             $table->timestamps();
         });
     }
