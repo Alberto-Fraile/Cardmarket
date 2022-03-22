@@ -81,13 +81,13 @@ class CardsController extends Controller
         }else {
             $data = $req->getContent();
             $data = json_decode($data);
-            $validId =[];
+            $searchValidId =[];
 
             foreach ($data->cards as $addCard) {
                 if(isset($addCard->id)){
                 $card = Card::where('id','=',$addCard->id)->first();
                 if($card){
-                    array_push($validId,$card->id);
+                    array_push($searchValidId,$card->id);
                 }
                 }elseif (isset($addCard->name) && isset($addCard->description)) {     
                         $newCard = new Card();
@@ -96,8 +96,8 @@ class CardsController extends Controller
 
                         try {
                             $newCard->save();
-                            array_push($validId,$newCard->id);
-                            $response['msg'] = "Card save with id ".$newcard->id;
+                            array_push($searchValidId,$newCard->id);
+                            $response['msg'] = "Card save with id ".$newCard->id;
                                 
                         } catch (\Exception $e) {
                             $response['status'] = 400;
@@ -108,8 +108,8 @@ class CardsController extends Controller
                 $response['msg'] = "The entered data does not exist";
             }    
         }
-        if(!empty($validId)){
-            $cardsIds = implode (", ",$validId); 
+        if(!empty($searchValidId)){
+            $cardId = implode (", ",$searchValidId); 
             try{
             $collection = new Collection();
             $collection->name = $data->name;
@@ -117,7 +117,7 @@ class CardsController extends Controller
             $collection->date = $data->date;
             $collection->save();
 
-            foreach($validId as $id){
+            foreach($searchValidId as $id){
                 $cardCollection = new CardCollection();
                 $cardCollection->card_id = $id;
                 $cardCollection->collection_id = $collection->id;
